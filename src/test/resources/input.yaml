@@ -1,0 +1,41 @@
+ports:
+  http: 8080
+  https: 8443
+paths:
+  - request:
+      methods: GET, POST
+      uri: /subscribers
+    responses:
+      - status: 204
+        headers:
+          Content-Type: application/json
+        body:
+          format: REQUEST
+        selector: true
+  - request:
+      methods: GET, POST
+      uri: /vendor/{vendorId}/subscribers/{subscriberId}
+    responses:
+      - status: 200
+        headers:
+          Content-Type: application/json
+        body:
+          file: output.json
+          inline: >-
+            {
+              "vendorId": "@{request.param['vendorId']}",
+              "subscriberId": "@{request.param['subscriberId']}"
+            }
+          format: INLINE
+        selector: request.query['q'].contains('tv') && request.query['validate'].contains('true')
+      - status: 500
+        headers:
+          Content-Type: application/json
+        body:
+          file: output.json
+          format: FILE # Supported options (in priority order if found multiple): INLINE | FILE | REQUEST | EMPTY
+        selector: true
+---
+ports:
+  http: 8181
+  https: 8553
