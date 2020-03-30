@@ -1,0 +1,45 @@
+ports:
+  http: 8080
+  https: 8443
+paths:
+  - name: SUBSCRIBERS_API
+    request:
+      methods: GET, POST
+      uri: /subscribers
+    responses:
+      - name: CREATE_SUBSCRIBER
+        status: 204
+        headers:
+          Content-Type: application/json
+        body:
+          format: REQUEST
+        selector: true
+  - name: VENDOR_SUBSCRIBER_API
+    request:
+      methods: GET, POST
+      uri: /vendor/{vendorId}/subscribers/{subscriberId}
+    responses:
+      - name: GET_SUBSCRIBER
+        status: 200
+        headers:
+          Content-Type: application/json
+        body:
+          file: output.json
+          format: FILE
+        selector: request.query['region'].contains('apac') && request.query['validate'].contains('true')
+      - name: Error Response
+        status: 500
+        headers:
+          Content-Type: application/json
+        body:
+          file: output.json
+          inline: >-
+            {
+              "status": "ERROR"
+            }
+          format: INLINE # INLINE | FILE | REQUEST | EMPTY (if not specified, will try to resolve using format in order until matched)
+        selector: now.minusDays(10).isBefore(java.time.LocalDateTime.now())
+---
+ports:
+  http: 8181
+  https: 8553

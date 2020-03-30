@@ -1,0 +1,16 @@
+{
+  "pathParam": "@{request.param['vendorId']}",
+  "queryParam": "@{request.query['region'][0]}",
+  "header": "@{request.header['Content-Type'][0]}",
+  "localDateTime": "@{now}",
+
+  @if{request.header['Content-Type'].contains('application/json')}
+  "jsonBodyValue" : "@{request.body.input}",
+  @end{}
+
+  @if{request.header['Content-Type'].contains('application/x-www-form-urlencoded')}
+  "formUrlEncodedValue" : "@{request.form.formKey}",
+  @end{}
+
+  "dateOperation": "@{now.minusDays(10).isBefore(java.time.LocalDateTime.now())}"
+}
