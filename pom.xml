@@ -11,7 +11,7 @@
     <properties>
         <java.version>1.8</java.version>
         <junit-version>4.13.1</junit-version>
-        <jackson-version>2.12.1</jackson-version>
+        <jackson-version>2.12.6.1</jackson-version>
         <undertow-version>2.0.30.Final</undertow-version>
         <assertj-version>3.15.0</assertj-version>
         <mockito-version>1.10.19</mockito-version>
